@@ -1,4 +1,6 @@
 # Team CaSa
 Calvin and Sajed
-
-# Features:
+**Features:**
+- mesh
+- gourard shading
+- 
