@@ -19,7 +19,7 @@ def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
         plot(screen, zbuffer, color, x, y, z)
         x+= 1
         z+= delta_z
-
+        
 def scanline_convert(polygons, i, screen, zbuffer, color):
     flip = False
     BOT = 0
@@ -70,7 +70,6 @@ def scanline_convert(polygons, i, screen, zbuffer, color):
         y+= 1
 
 
-
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0)
     add_point(polygons, x1, y1, z1)
@@ -84,12 +83,16 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
     point = 0
     while point < len(polygons) - 2:
 
+        #calculate normal of each face
         normal = calculate_normal(polygons, point)[:]
 
         #print normal
         if normal[2] > 0:
 
+            #lighting comes from flat shading
             color = get_lighting(normal, view, ambient, light, symbols, reflect )
+
+            #when doing gouraud shading, lighting comes from average of vertex normal of points
             scanline_convert(polygons, point, screen, zbuffer, color)
 
             # draw_line( int(polygons[point][0]),

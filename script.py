@@ -48,6 +48,7 @@ def run(filename):
 
     #print symbols
     for command in commands:
+        print(stack)
         if command['op'] == 'push':
             stack.append( [x[:] for x in stack[-1]] )
         elif command['op'] == 'pop':

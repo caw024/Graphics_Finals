@@ -1,5 +1,6 @@
 import math
 from display import *
+from collections import defaultdict
 
 
   # IMPORANT NOTE
@@ -117,5 +118,18 @@ def calculate_normal(polygons, i):
 
     return N
 
-def vertex_normal():
-    pass
+#calculate vertex normals of all vertices, we can access each index normal with index i
+def vertex_normal(polygons):
+    L = defaultdict(list)
+    for k in polygons:
+        L[k] = calculuate_normal(polygons,k)
+    return L
+    
+'''pseudocode:
+L = dict
+for T in triangle:
+  for V in triangle vertices:
+    add normal to L
+
+avg each normal for vertices
+'''
