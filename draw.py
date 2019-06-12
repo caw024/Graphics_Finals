@@ -21,6 +21,7 @@ def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
         z+= delta_z
         
 def scanline_convert(polygons, i, screen, zbuffer, color):
+    #print(vertex_normal(polygons))
     flip = False
     BOT = 0
     TOP = 2

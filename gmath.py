@@ -119,12 +119,28 @@ def calculate_normal(polygons, i):
     return N
 
 #calculate vertex normals of all vertices, we can access each index normal with index i
+#L[tuple] -> list of size one, averaged node
 def vertex_normal(polygons):
     L = defaultdict(list)
-    for k in polygons:
-        L[k] = calculuate_normal(polygons,k)
-    return L
-    
+    i = 0
+    while i < len(polygons):
+        K = calculate_normal(polygons,i)
+        L[tuple(polygons[i])].append(K)
+        L[tuple(polygons[i+1])].append(K)
+        L[tuple(polygons[i+2])].append(K)
+        i += 3
+    P = defaultdict(list)
+    for k in L:
+        #print(k)
+        #print(L[k])
+        length = len(L[k])
+        totalsum = [0,0,0]
+        for i in L[k]:
+            #print(i)
+            totalsum = [totalsum[0] + i[0], totalsum[1] + i[1], totalsum[2] + i[2] ]
+        P[k] = [totalsum[0]/length, totalsum[1]/length, totalsum[2]/length ]
+    return P
+        
 '''pseudocode:
 L = dict
 for T in triangle:

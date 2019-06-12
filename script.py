@@ -48,7 +48,7 @@ def run(filename):
 
     #print symbols
     for command in commands:
-        print(stack)
+        #print(stack)
         if command['op'] == 'push':
             stack.append( [x[:] for x in stack[-1]] )
         elif command['op'] == 'pop':
@@ -119,6 +119,8 @@ def run(filename):
             edges = []
 
         elif command['op'] == 'save':
+            #print(stack)
+            #print(vertex_normal(stack) )
             save_extension(screen, command['args'][0])
         elif command['op'] == 'display':
             display(screen)
