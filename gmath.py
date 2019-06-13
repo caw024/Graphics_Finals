@@ -147,7 +147,7 @@ def vertex_normal(polygons):
             totalsum = [totalsum[0] + normal[0], totalsum[1] + normal[1], totalsum[2] + normal[2] ]
         P[vertex] = [totalsum[0]/length, totalsum[1]/length, totalsum[2]/length]
         normalize(P[vertex])
-        print(P[vertex])
+        #print(P[vertex])
     return P
         
 '''pseudocode:

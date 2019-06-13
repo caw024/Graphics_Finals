@@ -51,6 +51,7 @@ def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
 
 #draws a line of colors
 def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
+    #xo corresponds to xcolor0 bc increasing from bot to top
     if x0 > x1:
         tx = x0
         tz = z0
@@ -58,37 +59,37 @@ def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
         z0 = z1
         x1 = tx
         z1 = tz
-        temp = xcolor0[:]
-        xcolor0 = xcolor1[:]
-        xcolor1 = temp[:]
+        temp = xcolor1[:]
+        xcolor1 = xcolor0[:]
+        xcolor0 = temp[:]
        
 
     #generally start at 0 -> 1
     x = x0
     z = z0
-    xcolor0 = [int(k) for k in xcolor0]
-    xcolor1 = [int(i) for i in xcolor1]
+    #xcolor0 = [int(k) for k in xcolor0]
+    #xcolor1 = [int(i) for i in xcolor1]
     delta_z = (z1 - z0) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_r = (xcolor0[0] - xcolor1[0]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_g = (xcolor0[1] - xcolor1[1]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_b = (xcolor0[2] - xcolor1[2]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_r = (xcolor1[0] - xcolor0[0]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_g = (xcolor1[1] - xcolor0[1]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_b = (xcolor1[2] - xcolor0[2]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     
     
     
     while x <= x1:
-        print(x,y,z,xcolor1,xcolor0)
-        plot(screen, zbuffer, xcolor1, x, y, z)
+        #print(int(x),int(y),int(z),xcolor1,xcolor0)
+        temp = [int(k) for k in xcolor0]
+        plot(screen, zbuffer, temp, int(x), int(y), int(z))
         x+= 1
         z+= delta_z
-        xcolor1[0] += delta_r
-        xcolor1[1] += delta_g
-        xcolor1[2] += delta_b
+        xcolor0[0] += delta_r
+        xcolor0[1] += delta_g
+        xcolor0[2] += delta_b
 
 
         
 def scanline_convert(polygons, i, screen, zbuffer, color):
-    print("----------------------------------------")
-    #print( vertex_normal(polygons) )
+    #print("----------------------------------------")
     flip = False
     BOT = 0
     TOP = 2
@@ -139,7 +140,7 @@ def scanline_convert(polygons, i, screen, zbuffer, color):
 
         
 def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
-    print("-----------------gouraud-----------------------")
+    #print("-----------------gouraud-----------------------")
     #print( vertex_normal(polygons) )
     flip = False
     BOT = 0
@@ -184,14 +185,16 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
         color2 = vertexnormals[points[TOP]]
     else:
         print("messed up top")
-    print("passed all")
-    
+    #print("passed all")
+
+    #My version: 1 goes from bot -> mid -> top, 0 is bot -> top
     #RGB colors
-    color0R, color0G, color0B = int(color0[0]), int(color0[1]),int(color0[2])
-    color1R, color1G, color1B = int(color1[0]), int(color1[1]),int(color1[2])
-    color2R, color2G, color2B = int(color2[0]), int(color2[1]),int(color2[2])
+    color0R, color0G, color0B = color0[0], color0[1],color0[2]
+    color1R, color1G, color1B = color1[0], color1[1],color1[2]
+    color2R, color2G, color2B = color2[0], color2[1],color2[2]
 
     #RGB colors to go up by
+    #bottom to top directly
     dcolor0r = (color2R - color0R) / distance0 if distance0 != 0 else 0
     dcolor0g = (color2G - color0G) / distance0 if distance0 != 0 else 0
     dcolor0b = (color2B - color0B) / distance0 if distance0 != 0 else 0
@@ -201,12 +204,12 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
     dcolor1b = (color1B - color0B) / distance1 if distance1 != 0 else 0
 
     #denotes current starting pos
-    xcolor0R, xcolor0G, xcolor0B = int(color0[0]), int(color0[1]),int(color0[2])
-    xcolor1R, xcolor1G, xcolor1B = int(color0[0]), int(color0[1]),int(color0[2])
+    xcolor0R, xcolor0G, xcolor0B = color0[0], color0[1],color0[2]
+    xcolor1R, xcolor1G, xcolor1B = color0[0], color0[1],color0[2]
     
     while y <= int(points[TOP][1]):
-        xcolor0 = [xcolor0R % 256, xcolor0G% 256, xcolor0B% 256]
-        xcolor1 = [xcolor1R% 256, xcolor1G% 256, xcolor1B% 256]
+        xcolor0 = [xcolor0R % 256, xcolor0G % 256, xcolor0B % 256]
+        xcolor1 = [xcolor1R % 256, xcolor1G % 256, xcolor1B % 256]
         if ( not flip and y >= int(points[MID][1])):
             flip = True
 
@@ -216,10 +219,10 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
             z1 = points[MID][2]
 
             #switch colors once we pass to middle
-            xcolor0R, xcolor0G, xcolor0B = color1R, color1G,color1B
-            dcolor0r = (color2R - color1R) / distance2 if distance2 != 0 else 0
-            dcolor0g = (color2G - color1G) / distance2 if distance2 != 0 else 0
-            dcolor0b = (color2B - color1B) / distance2 if distance2 != 0 else 0
+            xcolor1R, xcolor1G, xcolor1B = color1R, color1G,color1B
+            dcolor1r = (color2R - color1R) / distance2 if distance2 != 0 else 0
+            dcolor1g = (color2G - color1G) / distance2 if distance2 != 0 else 0
+            dcolor1b = (color2B - color1B) / distance2 if distance2 != 0 else 0
             
 
         #draw_line(int(x0), y, z0, int(x1), y, z1, screen, zbuffer, color)
@@ -236,6 +239,17 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
         xcolor1R += dcolor1r
         xcolor1G += dcolor1g
         xcolor1B += dcolor1b
+
+
+
+
+
+
+
+
+
+
+        
 
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0)
