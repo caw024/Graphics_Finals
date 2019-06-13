@@ -127,6 +127,9 @@ def vertex_normal(polygons):
     #each tuple has >= 1 element, which contains a normal
     while i < len(polygons) - 2:
         K = calculate_normal(polygons,i)
+        #print("before K", K)
+        normalize(K)
+        #print("normalized K", K)
         L[tuple(polygons[i][0:3])].append(K)
         L[tuple(polygons[i+1][0:3])].append(K)
         L[tuple(polygons[i+2][0:3])].append(K)
@@ -135,14 +138,16 @@ def vertex_normal(polygons):
     P = defaultdict(list)
     for vertex in L:
         #vertex is of the form (a,b,c,1.0)
-        print(vertex)
+        #print(vertex)
         #print(L[k])
         length = len(L[vertex])
         totalsum = [0,0,0]
         for normal in L[vertex]:
             #print(i)
             totalsum = [totalsum[0] + normal[0], totalsum[1] + normal[1], totalsum[2] + normal[2] ]
-        P[vertex] = [totalsum[0]/length, totalsum[1]/length, totalsum[2]/length ]
+        P[vertex] = [totalsum[0]/length, totalsum[1]/length, totalsum[2]/length]
+        normalize(P[vertex])
+        print(P[vertex])
     return P
         
 '''pseudocode:

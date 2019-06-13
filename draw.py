@@ -28,26 +28,27 @@ def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
         z0 = z1
         x1 = tx
         z1 = tz
-        temp = xcolor1[:]
-        xcolor1 = xcolor0[:]
-        xcolor0 = temp[:]
+        temp = xcolor0[:]
+        xcolor0 = xcolor1[:]
+        xcolor1 = temp[:]
 
     #generally start at 0 -> 1
     x = x0
     z = z0
     delta_z = (z1 - z0) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_r = (xcolor1[0] - xcolor0[0]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_g = (xcolor1[1] - xcolor0[1]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
-    delta_b = (xcolor1[2] - xcolor0[2]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_r = (xcolor0[0] - xcolor1[0]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_g = (xcolor0[1] - xcolor1[1]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
+    delta_b = (xcolor0[2] - xcolor1[2]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     
     
     while x <= x1:
-        plot(screen, zbuffer, xcolor0, x, y, z)
+        print(x,y,z)
+        plot(screen, zbuffer, xcolor1, x, y, z)
         x+= 1
         z+= delta_z
-        xcolor0[0] += delta_r
-        xcolor0[1] += delta_g
-        xcolor0[2] += delta_b
+        xcolor1[0] += delta_r
+        xcolor1[1] += delta_g
+        xcolor1[2] += delta_b
 
 
         
@@ -134,7 +135,7 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
     dz1 = (points[MID][2] - points[BOT][2]) / distance1 if distance1 != 0 else 0
 
     #RGB colors
-    print(points[BOT],points[MID],points[TOP])
+    #print(points[BOT],points[MID],points[TOP])
     if points[BOT] in vertexnormals:
         color0 = vertexnormals[points[BOT]]
     else:
@@ -227,27 +228,6 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
             #when doing gouraud shading, lighting comes from average of vertex normal of points
             scanline_convert(polygons, point, screen, zbuffer, color)
 
-            # draw_line( int(polygons[point][0]),
-            #            int(polygons[point][1]),
-            #            polygons[point][2],
-            #            int(polygons[point+1][0]),
-            #            int(polygons[point+1][1]),
-            #            polygons[point+1][2],
-            #            screen, zbuffer, color)
-            # draw_line( int(polygons[point+2][0]),
-            #            int(polygons[point+2][1]),
-            #            polygons[point+2][2],
-            #            int(polygons[point+1][0]),
-            #            int(polygons[point+1][1]),
-            #            polygons[point+1][2],
-            #            screen, zbuffer, color)
-            # draw_line( int(polygons[point][0]),
-            #            int(polygons[point][1]),
-            #            polygons[point][2],
-            #            int(polygons[point+2][0]),
-            #            int(polygons[point+2][1]),
-            #            polygons[point+2][2],
-            #            screen, zbuffer, color)
         point+= 3
 
 def draw_polygonsG( polygons, screen, zbuffer, view, ambient, light, symbols, reflect):
@@ -257,6 +237,7 @@ def draw_polygonsG( polygons, screen, zbuffer, view, ambient, light, symbols, re
 
     vertexnormals = vertex_normal(polygons)
     #print(vertexnormals)
+    #gets a color for each vertex based on previous normal
     for k in vertexnormals:
         vertexnormals[k] = get_lighting(vertexnormals[k], view, ambient, light, symbols, reflect )
     
