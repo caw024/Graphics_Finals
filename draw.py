@@ -49,6 +49,7 @@ def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
         x+= 1
         z+= delta_z
 
+#draws a line of colors
 def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
     if x0 > x1:
         tx = x0
@@ -60,18 +61,22 @@ def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
         temp = xcolor0[:]
         xcolor0 = xcolor1[:]
         xcolor1 = temp[:]
+       
 
     #generally start at 0 -> 1
     x = x0
     z = z0
+    xcolor0 = [int(k) for k in xcolor0]
+    xcolor1 = [int(i) for i in xcolor1]
     delta_z = (z1 - z0) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     delta_r = (xcolor0[0] - xcolor1[0]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     delta_g = (xcolor0[1] - xcolor1[1]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     delta_b = (xcolor0[2] - xcolor1[2]) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
     
     
+    
     while x <= x1:
-        print(x,y,z)
+        print(x,y,z,xcolor1,xcolor0)
         plot(screen, zbuffer, xcolor1, x, y, z)
         x+= 1
         z+= delta_z
@@ -200,8 +205,8 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
     xcolor1R, xcolor1G, xcolor1B = int(color0[0]), int(color0[1]),int(color0[2])
     
     while y <= int(points[TOP][1]):
-        xcolor0 = [xcolor0R, xcolor0G, xcolor0B]
-        xcolor1 = [xcolor1R, xcolor1G, xcolor1B]
+        xcolor0 = [xcolor0R % 256, xcolor0G% 256, xcolor0B% 256]
+        xcolor1 = [xcolor1R% 256, xcolor1G% 256, xcolor1B% 256]
         if ( not flip and y >= int(points[MID][1])):
             flip = True
 
