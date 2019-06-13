@@ -2,6 +2,35 @@ from display import *
 from matrix import *
 from gmath import *
 
+
+def generate_mesh (edges, filename):
+    points = generate_points(filename)
+    file = open(filename, 'r')
+    for line in file.readlines():
+        line = re.sub(' +',' ',line).split(" ")
+        if line[0] == 'f':
+            vertices = line[1:]
+            counter = 2
+            while counter < len(vertices):
+                p0 = int(vertices[0]) - 1
+                p1 = int(vertices[counter - 1]) - 1
+                p2 = int(vertices[counter]) - 1
+                add_polygon(edges, points[p0][0], points[p0][1], points[p0][2],
+                                   points[p1][0], points[p1][1], points[p1][2],
+                                   points[p2][0], points[p2][1], points[p2][2])
+                counter += 1
+    file.close()
+
+def generate_points(filename):
+    points = []
+    file = open(filename, 'r')
+    for line in file.readlines():
+        line = re.sub(' +',' ',line).split(" ")
+        if line[0] == 'v':
+            points.append([float(line[1]), float(line[2]), float(line[3])])
+    file.close()
+    return points
+
 def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
     if x0 > x1:
         tx = x0
