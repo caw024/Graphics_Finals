@@ -119,7 +119,8 @@ def calculate_normal(polygons, i):
     return N
 
 #calculate vertex normals of all vertices, we can access each index normal with index i
-#L[tuple] -> list of size one, averaged node
+#L[tuple] -> list of lists, containing all normals that a vertice shares
+#P[tuple] -> list of one averaged node
 def vertex_normal(polygons):
     L = defaultdict(list)
     i = 0
