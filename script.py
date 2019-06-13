@@ -81,9 +81,9 @@ def run(filename):
                     command['args'][3], command['args'][4], command['args'][5])
             matrix_mult( stack[-1], tmp )
             if command["constants"]:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols,command["constants"])
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols,command["constants"])
             else:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
 
             tmp = []
         elif command['op'] == 'sphere':
@@ -93,9 +93,9 @@ def run(filename):
                        command['args'][3], step_3d)
             matrix_mult( stack[-1], tmp )
             if command["constants"]:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, command["constants"])
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, command["constants"])
             else:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
             tmp = []
         elif command['op'] == 'torus':
             #print 'SPHERE\t' + str(args)
@@ -104,9 +104,9 @@ def run(filename):
                       command['args'][3], command['args'][4], step_3d)
             matrix_mult( stack[-1], tmp )
             if command["constants"]:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols,command["constants"])
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols,command["constants"])
             else:
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
             tmp = []
         elif command['op'] == 'constants':
             pass

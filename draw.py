@@ -45,9 +45,9 @@ def draw_scanlineG(x0, z0, x1, z1, y, screen, zbuffer, xcolor0, xcolor1):
         plot(screen, zbuffer, xcolor0, x, y, z)
         x+= 1
         z+= delta_z
-        xcolor[0] += delta_r
-        xcolor[1] += delta_g
-        xcolor[2] += delta_b
+        xcolor0[0] += delta_r
+        xcolor0[1] += delta_g
+        xcolor0[2] += delta_b
 
 
         
@@ -134,6 +134,7 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
     dz1 = (points[MID][2] - points[BOT][2]) / distance1 if distance1 != 0 else 0
 
     #RGB colors
+    print(points[BOT],points[MID],points[TOP])
     if points[BOT] in vertexnormals:
         color0 = vertexnormals[points[BOT]]
     else:
@@ -148,6 +149,7 @@ def scanline_convertG(polygons, i, screen, zbuffer, vertexnormals):
         color2 = vertexnormals[points[TOP]]
     else:
         print("messed up top")
+    print("passed all")
     
     #RGB colors
     color0R, color0G, color0B = int(color0[0]), int(color0[1]),int(color0[2])
@@ -254,8 +256,9 @@ def draw_polygonsG( polygons, screen, zbuffer, view, ambient, light, symbols, re
         return
 
     vertexnormals = vertex_normal(polygons)
+    #print(vertexnormals)
     for k in vertexnormals:
-        vertexnormals[k] = get_lighting(vectornormals[k], view, ambient, light, symbols, reflect )
+        vertexnormals[k] = get_lighting(vertexnormals[k], view, ambient, light, symbols, reflect )
     
     point = 0
     while point < len(polygons) - 2:
