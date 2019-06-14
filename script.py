@@ -110,6 +110,11 @@ def run(filename):
             tmp = []
         elif command['op'] == 'constants':
             pass
+        elif command['op'] == 'mesh':
+            generate_mesh(tmp, command['args'][0])
+            matrix_mult(stack[-1], tmp)
+            draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+            tmp = []
         elif command['op'] == 'line':
             add_edge( edges,
                       command['args'][0], command['args'][1], command['args'][2],
