@@ -111,7 +111,8 @@ def run(filename):
         elif command['op'] == 'constants':
             pass
         elif command['op'] == 'mesh':
-            generate_mesh(tmp, command['args'][0])
+	    print "here"
+            generate_mesh(tmp, command['args'][0] + ".obj")
             matrix_mult(stack[-1], tmp)
             draw_polygonsG(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
             tmp = []

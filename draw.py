@@ -1,7 +1,7 @@
 from display import *
 from matrix import *
 from gmath import *
-
+import re
 
 def generate_mesh (edges, filename):
     points = generate_points(filename)
