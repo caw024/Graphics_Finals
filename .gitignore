@@ -1,0 +1,7 @@
+### Python Stuff ###
+
+__pycache__/
+.cache/
+.pytest_cache/
+*.py~
+.pyc
